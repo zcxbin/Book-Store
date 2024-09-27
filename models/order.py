@@ -14,5 +14,5 @@ class Order(Base):
     user_address = Column(String, nullable=False)
     payment_method = Column(Enum('PayPal', 'PayPal', 'PayPalPayments'))
 
-    order_items = relationship('OrderItem', back_populates='order')
+    order_items = relationship('OrderItem', back_populates='orders')
     users = relationship('User', back_populates='orders')

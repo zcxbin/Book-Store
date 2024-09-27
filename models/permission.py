@@ -10,4 +10,4 @@ class Permission(Base):
     activity = Column(String, nullable=False)
     description = Column(String, nullable=False)
 
-    role_permission = relationship("RolePermission", back_populates="permissions")
+    role_permissions = relationship("RolePermission", back_populates="permissions")

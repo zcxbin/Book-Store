@@ -9,4 +9,4 @@ class Category(Base):
     id = Column(Integer, primary_key=True, index=True, nullable=False)
     type_name = Column(String, unique=True, nullable=False)
 
-    books = relationship('Book', back_populates='category')
+    books = relationship('Book', back_populates='categories')
