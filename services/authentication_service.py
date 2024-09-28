@@ -1,11 +1,10 @@
 from fastapi.security import OAuth2PasswordRequestForm
-from sqlalchemy import Update
 from sqlalchemy.orm import Session
 
 from models import Role as RoleModel
 from models.user import User as UserModel
 from schemas.authentication import Token, Register, UpdateUser
-from schemas.user import User as UserSchema
+from schemas.user import User as UserSchema, UserResponse
 from configs.authentication import verify_password, get_password_hash, create_access_token
 
 
@@ -59,3 +58,21 @@ class AuthenticationService:
             )
         except Exception as e:
             print(e)
+
+    def update_user(self, update_data: UpdateUser, db: Session, user_id: int) -> UserResponse:
+        user_model = db.query(UserModel).filter(UserModel.id == user_id).first()
+        user_model.username = update_data.username
+        user_model.password = get_password_hash(update_data.password)
+        user_model.address = update_data.address
+        user_model.phone_number = update_data.phone_number
+        role_model = db.query(RoleModel).filter(RoleModel.id == user_model.role_id).first()
+        db.commit()
+        return UserResponse(
+            id=user_model.id,
+            username=user_model.username,
+            email=user_model.email,
+            address=user_model.address,
+            role=role_model.role_name
+        )
+
+

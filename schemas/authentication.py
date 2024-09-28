@@ -17,7 +17,11 @@ class Register(BaseModel):
 class UpdateUser(BaseModel):
     username: str
     password: str
-    role: str
+    address: str
+    phone_number: str
+
+    class Config:
+        from_attributes = True
 
 
 class Token(BaseModel):
@@ -29,4 +33,3 @@ class TokenData(BaseModel):
     username: str = None
     role: str = None
     id: int = None
-
