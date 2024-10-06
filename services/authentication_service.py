@@ -75,4 +75,8 @@ class AuthenticationService:
             role=role_model.role_name
         )
 
+    def delete_user(self, db: Session, user_id: int):
+        user_model = db.query(UserModel).filter(UserModel.id == user_id).first()
+        db.delete(user_model)
+        db.commit()
 

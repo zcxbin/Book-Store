@@ -15,8 +15,8 @@ class Book(Base):
     price = Column(Integer, nullable=False)
     discount = Column(Integer, nullable=False)
     description = Column(String, nullable=False)
-    img_url = Column(String, nullable=False)
-    stock_count = Column(Integer, nullable=False)
+    image_url = Column(String, nullable=False)
+    stock_quantity = Column(Integer, nullable=False)
 
     authors = relationship("Author", back_populates="books")
     categories = relationship("Category", back_populates="books")

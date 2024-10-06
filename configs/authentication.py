@@ -58,7 +58,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> TokenData | H
         username: str = payload.get("username")
         role: str = payload.get("role")
         user_id: int = payload.get("id")
-        # print(username, role, user_id)
+        print(username, role, user_id)
 
         if username is None:
             return HTTPException(
