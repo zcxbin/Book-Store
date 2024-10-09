@@ -1,13 +1,9 @@
-from typing import List
-
 from sqlalchemy.orm import Session
-
 from exceptions import raise_error
 from models import Category as CategoryModel
 from models.book import Book as BookModel
 from models.author import Author as AuthorModel
 
-from schemas.book import Book as BookSchema
 
 
 def get_book_service():
