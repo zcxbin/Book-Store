@@ -8,11 +8,10 @@ class Order(Base):
     __tablename__ = 'orders'
     id = Column(Integer, primary_key=True, index=True, nullable=False)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
-    order_date = Column(Date, nullable=False)
-    status = Column(Enum('Pending', 'Shipped', 'Delivered', 'Canceled'), nullable=False)
+    order_date = Column(String, nullable=False)
+    status = Column(String, nullable=False, default='Pending')
     total_price = Column(Integer, nullable=False)
     user_address = Column(String, nullable=False)
-    payment_method = Column(Enum('PayPal', 'PayPal', 'PayPalPayments'))
 
     order_items = relationship('OrderItem', back_populates='orders')
     users = relationship('User', back_populates='orders')
