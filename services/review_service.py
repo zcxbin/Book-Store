@@ -4,7 +4,7 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 from exceptions import raise_error
 from models import Review as ReviewModel
-from schemas.review import ReviewCreate
+from schemas.review import ReviewCreate, ReviewResponse
 
 
 def get_review_service():
@@ -28,5 +28,12 @@ class ReviewService:
             db.commit()
             db.refresh(new_review)
             return new_review
+        except Exception as e:
+            db.rollback()
+            print(traceback.print_exc())
+
+    def get_reviews_by_books_id(self, db: Session, book_id: int) -> ReviewResponse:
+        try:
+            return db.query(ReviewModel).filter(ReviewModel.book_id == book_id).all()
         except Exception as e:
             print(traceback.print_exc())
