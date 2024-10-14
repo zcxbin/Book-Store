@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 
 from configs.authentication import get_current_user
 from configs.database import get_db
-from schemas.review import ReviewCreate, ReviewResponse
+from schemas.review import ReviewCreate, ReviewResponse, ReviewUpdate
 from services.review_service import get_review_service
 
 router = APIRouter()
@@ -34,5 +34,19 @@ async def get_reviews_by_books(
             data=reviews,
             length=len(reviews)
         )
+    except Exception as e:
+        print(e)
+
+
+@router.put('/update_review')
+async def update_review(
+        book_id: int,
+        review_update: ReviewUpdate,
+        db=Depends(get_db),
+        review_service=Depends(get_review_service),
+        user=Depends(get_current_user)
+):
+    try:
+        return review_service.update_review(db, review_update, user.id, book_id)
     except Exception as e:
         print(e)
