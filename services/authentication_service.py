@@ -1,9 +1,13 @@
+from typing import Union
+
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
+from exceptions import raise_error
 from models import Role as RoleModel
 from models.user import User as UserModel
 from schemas.authentication import Token, Register, UpdateUser
+from schemas.base_response import BaseResponse
 from schemas.user import User as UserSchema, UserResponse
 from configs.authentication import verify_password, get_password_hash, create_access_token
 
@@ -16,13 +20,13 @@ def get_authentication_service():
 
 
 class AuthenticationService:
-    def authenticate_user(self, login_data: OAuth2PasswordRequestForm, db: Session) -> Token:
+    def authenticate_user(self, login_data: OAuth2PasswordRequestForm, db: Session) -> Union[raise_error, Token]:
         user = db.query(UserModel).filter(UserModel.username == login_data.username).first()
         role = db.query(RoleModel).filter(user.role_id == RoleModel.id).first()
         if not user:
-            return None
+            return raise_error(402)
         if not verify_password(login_data.password, user.password):
-            return None
+            return raise_error(401)
         # print(user.username, user.role, user.id)
 
         access_token = create_access_token(data={
