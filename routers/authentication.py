@@ -11,16 +11,16 @@ router = APIRouter()
 
 
 @router.post('/login')
-def login(login_data: OAuth2PasswordRequestForm = Depends(),
-          authentication_service=Depends(get_authentication_service),
-          db=Depends(get_db)):
+def login(login_data: OAuth2PasswordRequestForm = Depends(), authentication_service=Depends(get_authentication_service)
+          , db=Depends(get_db)):
     try:
         response = authentication_service.authenticate_user(login_data, db)
-        if response.status == "error":
-            return response
+        if response is None:
+            return None
         return response
     except Exception as e:
         return e
+
 
 
 @router.post('/register', response_model=UserSchema)

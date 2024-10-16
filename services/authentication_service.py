@@ -20,14 +20,14 @@ def get_authentication_service():
 
 
 class AuthenticationService:
-    def authenticate_user(self, login_data: OAuth2PasswordRequestForm, db: Session) -> Union[raise_error, Token]:
+    def authenticate_user(self, login_data: OAuth2PasswordRequestForm, db: Session) -> Token:
         user = db.query(UserModel).filter(UserModel.username == login_data.username).first()
         role = db.query(RoleModel).filter(user.role_id == RoleModel.id).first()
         if not user:
             return raise_error(402)
         if not verify_password(login_data.password, user.password):
             return raise_error(401)
-        # print(user.username, user.role, user.id)
+        print(user.username, role.role_name, user.id)
 
         access_token = create_access_token(data={
             'username': user.username,
