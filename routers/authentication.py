@@ -16,8 +16,8 @@ def login(login_data: OAuth2PasswordRequestForm = Depends(),
           db=Depends(get_db)):
     try:
         response = authentication_service.authenticate_user(login_data, db)
-        if response is None:
-            return None
+        if response.status == "error":
+            return response
         return response
     except Exception as e:
         return e
