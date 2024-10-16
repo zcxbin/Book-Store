@@ -3,7 +3,7 @@ from exceptions import raise_error
 from models import Category as CategoryModel
 from models.book import Book as BookModel
 from models.author import Author as AuthorModel
-
+from schemas.book import BookResponse
 
 
 def get_book_service():
@@ -14,8 +14,11 @@ def get_book_service():
 
 
 class BookService:
+
+    def get_all_books(self, db: Session):
+        return db.query(BookModel).all()
+
     def get_books_by_author_name(self, db: Session, author_name: str):
-        print(author_name)
         author_model = db.query(AuthorModel).filter(
             AuthorModel.author_name == author_name).first()
 

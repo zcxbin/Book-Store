@@ -9,7 +9,7 @@ class Book(BaseModel):
     discount: int
     description: str
     image_url: str
-    stock_quantity: int
+    quantity: int
 
     class Config:
         from_attributes = True
