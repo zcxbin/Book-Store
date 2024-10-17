@@ -45,16 +45,19 @@ class AuthenticationService:
             role=new_user.role
         )
 
-    def update_user(self, update_data: UpdateUser, db: Session) -> UserSchema:
-        user_model = db.query(UserModel).filter(UserModel.username == update_data.username).first()
+    def update_user(self, update_data: UpdateUser, db: Session, user_id: int) -> UserSchema:
+        user_model = db.query(UserModel).filter(UserModel.id == user_id).first()
+        user_model.username = update_data.username
         user_model.username = update_data.username
         user_model.password = get_password_hash(update_data.password)
-        user_model.role = update_data.role
+        user_model.phone_number = update_data.phone_number
+        role_model = db.query(RoleModel).filter(RoleModel.id == user_model.role_id).first()
         db.commit()
         return UserSchema(
-            id=user_model.id,
             username=user_model.username,
-            role=user_model.role
+            email=user_model.email,
+            role=role_model.role_name,
+            address=user_model.address
         )
 
     def delete_user(self, db: Session, user_id: int) -> UserSchema:

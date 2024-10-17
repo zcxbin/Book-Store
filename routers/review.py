@@ -52,7 +52,7 @@ async def update_review(
         print(e)
 
 
-@router.delete('delete_review')
+@router.delete('/delete_review')
 async def delete_review(
         book_id: int,
         db=Depends(get_db),
