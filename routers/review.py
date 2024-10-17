@@ -50,3 +50,16 @@ async def update_review(
         return review_service.update_review(db, review_update, user.id, book_id)
     except Exception as e:
         print(e)
+
+
+@router.delete('delete_review')
+async def delete_review(
+        book_id: int,
+        db=Depends(get_db),
+        review_service=Depends(get_review_service),
+        user=Depends(get_current_user)
+):
+    try:
+        return review_service.delete_review(db, user.id, book_id)
+    except Exception as e:
+        print(e)

@@ -39,7 +39,7 @@ class ReviewService:
         except Exception as e:
             print(traceback.print_exc())
 
-    def update_review(self, db: Session, review: ReviewUpdate,  user_id: int, book_id: int):
+    def update_review(self, db: Session, review: ReviewUpdate, user_id: int, book_id: int):
         update_review = db.query(ReviewModel).filter(and_(
             ReviewModel.user_id == user_id,
             ReviewModel.book_id == book_id
@@ -54,4 +54,16 @@ class ReviewService:
             comment=review.comment,
             created_at=update_review.created_at
         )
+
+    def delete_review(self, db: Session, user_id: int, book_id: int):
+        review_to_delete = db.query(ReviewModel).filter(and_(
+            ReviewModel.user_id == user_id,
+            ReviewModel.book_id == book_id
+        )).first()
+
+        if review_to_delete:
+            db.delete(review_to_delete)
+            db.commit()
+        else:
+            print("Review không tồn tại")
 

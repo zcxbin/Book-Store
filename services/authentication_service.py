@@ -58,6 +58,6 @@ class AuthenticationService:
         )
 
     def delete_user(self, db: Session, user_id: int) -> UserSchema:
-        user = db.query(UserModel).filter(UserModel.username == user_id).first()
+        user = db.query(UserModel).filter(UserModel.id == user_id).first()
         db.delete(user)
         db.commit()
