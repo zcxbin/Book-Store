@@ -18,20 +18,10 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 
 def verify_password(plain_password, hashed_password):
-    """
-    :param plain_password:
-    :param hashed_password:
-    :return:
-    """
     return pwd_context.verify(plain_password, hashed_password)
 
 
 def get_password_hash(password):
-    """
-    Hash Password
-    :param password:
-    :return:
-    """
     return pwd_context.hash(password)
 
 
@@ -47,6 +37,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None) -> s
 
 
 async def get_current_user(token: str = Depends(oauth2_scheme)) -> TokenData | HTTPException:
+    print(token)
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("username")

@@ -20,7 +20,7 @@ def get_authentication_service():
 
 
 class AuthenticationService:
-    def authenticate_user(self, login_data: OAuth2PasswordRequestForm, db: Session) -> BaseResponse | Token:
+    def authenticate_user(self, login_data: OAuth2PasswordRequestForm, db: Session) -> Token | BaseResponse:
         user = db.query(UserModel).filter(UserModel.username == login_data.username).first()
         role = db.query(RoleModel).filter(user.role_id == RoleModel.id).first()
         if not user:
