@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Date
 from sqlalchemy.orm import relationship
 
 from configs.database import Base
@@ -11,12 +11,12 @@ class Book(Base):
     author_id = Column(Integer, ForeignKey('authors.id'), nullable=False)
     category_id = Column(Integer, ForeignKey('categories.id'), nullable=False)
     publisher_id = Column(Integer, ForeignKey('publishers.id'), nullable=False)
-    publication_date = Column(String, nullable=False)
+    publication_date = Column(Date, nullable=False)
     price = Column(Integer, nullable=False)
     discount = Column(Integer, nullable=False)
     description = Column(String, nullable=False)
     image_url = Column(String, nullable=False)
-    quantity = Column(Integer, nullable=False)
+    stock_quantity = Column(Integer, nullable=False)
 
     authors = relationship("Author", back_populates="books")
     categories = relationship("Category", back_populates="books")
