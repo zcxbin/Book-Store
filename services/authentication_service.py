@@ -1,13 +1,11 @@
 from fastapi.security import OAuth2PasswordRequestForm
+from sqlalchemy import Update
 from sqlalchemy.orm import Session
-
-from models import Role as RoleModel
+from schemas.user import User as UserSchema
 from models.user import User as UserModel
 from schemas.authentication import Token, Register, UpdateUser
-from schemas.user import User as UserSchema, UserResponse
 from configs.authentication import verify_password, get_password_hash, create_access_token
-
-
+from models.role import Role as RoleModel
 def get_authentication_service():
     try:
         yield AuthenticationService()
@@ -16,23 +14,14 @@ def get_authentication_service():
 
 
 class AuthenticationService:
-<<<<<<< HEAD
-    def authenticate_user(self, login_data: OAuth2PasswordRequestForm, db: Session) -> Token | BaseResponse:
-=======
     def authenticate_user(self, login_data: OAuth2PasswordRequestForm, db: Session) -> Token:
->>>>>>> parent of df383a1 (update logic login)
         user = db.query(UserModel).filter(UserModel.username == login_data.username).first()
-        role = db.query(RoleModel).filter(user.role_id == RoleModel.id).first()
+        role = db.query(RoleModel).filter(RoleModel.id == user.role_id).first()
         if not user:
             return None
         if not verify_password(login_data.password, user.password):
-<<<<<<< HEAD
-            return raise_error(401)
-        print(user.username, role.role_name, user.id)
-=======
             return None
-        # print(user.username, user.role, user.id)
->>>>>>> parent of df383a1 (update logic login)
+        print(user.username, role.role_name, user.id)
 
         access_token = create_access_token(data={
             'username': user.username,
@@ -42,50 +31,33 @@ class AuthenticationService:
         return Token(access_token=access_token)
 
     def register_user(self, register_data: Register, db: Session) -> UserSchema:
-        try:
-            new_user = UserModel(
-                username=register_data.username,
-                email=register_data.email,
-                password=get_password_hash(register_data.password),
-                first_name=register_data.first_name,
-                last_name=register_data.last_name,
-                phone_number=register_data.phone_number,
-                address=register_data.address,
-                role_id=2
-            )
-            db.add(new_user)
-            db.commit()
-            db.refresh(new_user)
-            user_role = db.query(RoleModel).filter(new_user.role_id == RoleModel.id).first()
-            return UserSchema(
-                id=new_user.id,
-                username=new_user.username,
-                email=new_user.email,
-                phone_number=new_user.phone_number,
-                address=new_user.address,
-                role=user_role.role_name
-            )
-        except Exception as e:
-            print(e)
-
-    def update_user(self, update_data: UpdateUser, db: Session, user_id: int) -> UserResponse:
-        user_model = db.query(UserModel).filter(UserModel.id == user_id).first()
-        user_model.username = update_data.username
-        user_model.password = get_password_hash(update_data.password)
-        user_model.address = update_data.address
-        user_model.phone_number = update_data.phone_number
-        role_model = db.query(RoleModel).filter(RoleModel.id == user_model.role_id).first()
+        new_user = UserModel(
+            username=register_data.username,
+            password=get_password_hash(register_data.password),
+            role=register_data.role
+        )
+        db.add(new_user)
         db.commit()
-        return UserResponse(
-            id=user_model.id,
-            username=user_model.username,
-            email=user_model.email,
-            address=user_model.address,
-            role=role_model.role_name
+        db.refresh(new_user)
+        return UserSchema(
+            id=new_user.id,
+            username=new_user.username,
+            role=new_user.role
         )
 
-    def delete_user(self, db: Session, user_id: int):
-        user_model = db.query(UserModel).filter(UserModel.id == user_id).first()
-        db.delete(user_model)
+    def update_user(self, update_data: UpdateUser, db: Session) -> UserSchema:
+        user_model = db.query(UserModel).filter(UserModel.username == update_data.username).first()
+        user_model.username = update_data.username
+        user_model.password = get_password_hash(update_data.password)
+        user_model.role = update_data.role
         db.commit()
+        return UserSchema(
+            id=user_model.id,
+            username=user_model.username,
+            role=user_model.role
+        )
 
+    def delete_user(self, db: Session, user_id: int) -> UserSchema:
+        user = db.query(UserModel).filter(UserModel.username == user_id).first()
+        db.delete(user)
+        db.commit()
