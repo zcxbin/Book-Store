@@ -9,7 +9,7 @@ class Order(Base):
     id = Column(Integer, primary_key=True, index=True, nullable=False)
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     order_date = Column(String, nullable=False)
-    status = Column(String, nullable=False)
+    status = Column(String, nullable=False, default='Pending')
     total_price = Column(Integer, nullable=False)
     user_address = Column(String, nullable=False)
 

@@ -3,7 +3,6 @@ from datetime import datetime
 
 from sqlalchemy import and_
 from sqlalchemy.orm import Session
-from exceptions import raise_error
 from models import Review as ReviewModel
 from schemas.review import ReviewCreate, ReviewResponse, ReviewUpdate, ReviewUpdateResponse
 
