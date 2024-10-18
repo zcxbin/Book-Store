@@ -119,4 +119,4 @@ Documents/~$*.docx
 ~$*.xlsx
 
 
-.idea/
+.idea/*.pyc
