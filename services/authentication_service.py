@@ -60,7 +60,8 @@ class AuthenticationService:
             address=user_model.address
         )
 
-    def delete_user(self, db: Session, user_id: int) -> UserSchema:
+    def delete_user(self, db: Session, user_id: int) -> list[type[UserSchema]]:
         user = db.query(UserModel).filter(UserModel.id == user_id).first()
         db.delete(user)
         db.commit()
+        return db.query(UserModel).all()

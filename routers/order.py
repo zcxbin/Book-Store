@@ -35,6 +35,7 @@ async def get_order_by_user_id(
     except Exception as e:
         print(e)
 
+
 @router.post('/create_orders')
 async def create_order(
         order: OrderItemCreate,
