@@ -120,3 +120,5 @@ Documents/~$*.docx
 
 
 .idea/*
+.idea/Book Store.iml
+.idea/misc.xml
