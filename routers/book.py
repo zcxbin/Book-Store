@@ -9,7 +9,7 @@ router = APIRouter()
 
 
 @router.get("/get_books", response_model=BookResponse)
-async def get_books(db: Session = Depends(get_db),
+async def get_books(db=Depends(get_db),
                     book_service=Depends(get_book_service)):
     try:
         books = book_service.get_all_books(db)
