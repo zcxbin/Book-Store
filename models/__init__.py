@@ -13,3 +13,4 @@ from .shipping import Shipping
 from .user import User
 from .wish_list import WishList
 from configs.database import Base
+from chat import ChatRoom, Message

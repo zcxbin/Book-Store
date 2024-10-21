@@ -20,3 +20,5 @@ class User(Base):
     roles = relationship('Role', back_populates='users')
     reviews = relationship('Review', back_populates='users')
     wish_list = relationship('WishList', back_populates='users')
+    chat_rooms = relationship("ChatRoom", back_populates="owner")
+    messages = relationship("Message", back_populates="user")
