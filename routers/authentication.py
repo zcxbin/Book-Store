@@ -7,6 +7,7 @@ from configs.database import get_db
 from schemas.authentication import Register, UpdateUser
 from services.authentication_service import get_authentication_service
 from schemas.user import User as UserSchema
+
 router = APIRouter()
 
 
@@ -22,8 +23,7 @@ def login(login_data: OAuth2PasswordRequestForm = Depends(), authentication_serv
         return e
 
 
-
-@router.post('/register', response_model=UserSchema)
+@router.post('/register')
 def register(register_data: Register,
              authentication_service=Depends(get_authentication_service),
              db=Depends(get_db)):

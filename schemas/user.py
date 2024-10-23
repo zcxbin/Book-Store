@@ -2,10 +2,11 @@ from pydantic import BaseModel
 
 
 class User(BaseModel):
+    id: int
     username: str
     email: str
-    role: str
     address: str
+    role: str
 
     class Config:
         from_attributes = True

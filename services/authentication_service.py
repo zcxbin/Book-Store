@@ -6,6 +6,8 @@ from models.user import User as UserModel
 from schemas.authentication import Token, Register, UpdateUser
 from configs.authentication import verify_password, get_password_hash, create_access_token
 from models.role import Role as RoleModel
+
+
 def get_authentication_service():
     try:
         yield AuthenticationService()
@@ -33,35 +35,44 @@ class AuthenticationService:
     def register_user(self, register_data: Register, db: Session) -> UserSchema:
         new_user = UserModel(
             username=register_data.username,
+            email=register_data.email,
             password=get_password_hash(register_data.password),
-            role=register_data.role
+            first_name=register_data.first_name,
+            last_name=register_data.last_name,
+            phone_number=register_data.phone_number,
+            address=register_data.address
         )
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
+        role_model = db.query(RoleModel).filter(RoleModel.id == new_user.role_id).first()
         return UserSchema(
             id=new_user.id,
             username=new_user.username,
-            role=new_user.role
+            email=new_user.email,
+            address=new_user.address,
+            role=role_model.role_name
         )
 
-    def update_user(self, update_data: UpdateUser, db: Session, user_id: int) -> UserSchema:
-        user_model = db.query(UserModel).filter(UserModel.id == user_id).first()
-        user_model.username = update_data.username
-        user_model.username = update_data.username
-        user_model.password = get_password_hash(update_data.password)
-        user_model.phone_number = update_data.phone_number
-        role_model = db.query(RoleModel).filter(RoleModel.id == user_model.role_id).first()
-        db.commit()
-        return UserSchema(
-            username=user_model.username,
-            email=user_model.email,
-            role=role_model.role_name,
-            address=user_model.address
-        )
 
-    def delete_user(self, db: Session, user_id: int) -> list[type[UserSchema]]:
-        user = db.query(UserModel).filter(UserModel.id == user_id).first()
-        db.delete(user)
-        db.commit()
-        return db.query(UserModel).all()
+def update_user(self, update_data: UpdateUser, db: Session, user_id: int) -> UserSchema:
+    user_model = db.query(UserModel).filter(UserModel.id == user_id).first()
+    user_model.username = update_data.username
+    user_model.username = update_data.username
+    user_model.password = get_password_hash(update_data.password)
+    user_model.phone_number = update_data.phone_number
+    role_model = db.query(RoleModel).filter(RoleModel.id == user_model.role_id).first()
+    db.commit()
+    return UserSchema(
+        username=user_model.username,
+        email=user_model.email,
+        role=role_model.role_name,
+        address=user_model.address
+    )
+
+
+def delete_user(self, db: Session, user_id: int) -> list[type[UserSchema]]:
+    user = db.query(UserModel).filter(UserModel.id == user_id).first()
+    db.delete(user)
+    db.commit()
+    return db.query(UserModel).all()
