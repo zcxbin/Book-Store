@@ -63,6 +63,7 @@ class AuthenticationService:
         role_model = db.query(RoleModel).filter(RoleModel.id == user_model.role_id).first()
         db.commit()
         return UserSchema(
+            id=user_model.id,
             username=user_model.username,
             email=user_model.email,
             role=role_model.role_name,
