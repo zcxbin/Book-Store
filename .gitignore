@@ -119,7 +119,5 @@ Documents/~$*.docx
 ~$*.xlsx
 
 
-.idea/*
-.idea/Book Store.iml
-.idea/misc.xml
+.idea/
 *alembic*
