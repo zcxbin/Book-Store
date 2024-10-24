@@ -6,7 +6,7 @@ from models.user import User as UserModel
 from schemas.authentication import Token, Register, UpdateUser
 from configs.authentication import verify_password, get_password_hash, create_access_token
 from models.role import Role as RoleModel
-
+from models.review import Review as ReviewModel
 
 def get_authentication_service():
     try:
@@ -54,25 +54,26 @@ class AuthenticationService:
             role=role_model.role_name
         )
 
+    def update_user(self, update_data: UpdateUser, db: Session, user_id: int) -> UserSchema:
+        user_model = db.query(UserModel).filter(UserModel.id == user_id).first()
+        user_model.username = update_data.username
+        user_model.username = update_data.username
+        user_model.password = get_password_hash(update_data.password)
+        user_model.phone_number = update_data.phone_number
+        role_model = db.query(RoleModel).filter(RoleModel.id == user_model.role_id).first()
+        db.commit()
+        return UserSchema(
+            username=user_model.username,
+            email=user_model.email,
+            role=role_model.role_name,
+            address=user_model.address
+        )
 
-def update_user(self, update_data: UpdateUser, db: Session, user_id: int) -> UserSchema:
-    user_model = db.query(UserModel).filter(UserModel.id == user_id).first()
-    user_model.username = update_data.username
-    user_model.username = update_data.username
-    user_model.password = get_password_hash(update_data.password)
-    user_model.phone_number = update_data.phone_number
-    role_model = db.query(RoleModel).filter(RoleModel.id == user_model.role_id).first()
-    db.commit()
-    return UserSchema(
-        username=user_model.username,
-        email=user_model.email,
-        role=role_model.role_name,
-        address=user_model.address
-    )
-
-
-def delete_user(self, db: Session, user_id: int) -> list[type[UserSchema]]:
-    user = db.query(UserModel).filter(UserModel.id == user_id).first()
-    db.delete(user)
-    db.commit()
-    return db.query(UserModel).all()
+    def delete_user(self, db: Session, user_id: int) -> list[type[UserSchema]]:
+        user = db.query(UserModel).filter(UserModel.id == user_id).first()
+        user_reviews = db.query(ReviewModel).filter(ReviewModel.user_id == user.id).all()
+        for review in user_reviews:
+            db.delete(review)
+        db.delete(user)
+        db.commit()
+        return db.query(UserModel).all()

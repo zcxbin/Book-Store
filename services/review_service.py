@@ -22,7 +22,7 @@ class ReviewService:
                 book_id=book_id,
                 rating=review.rating,
                 comment=review.comment,
-                created_at=datetime.now(),
+                created_at=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
             )
             db.add(new_review)
             db.commit()
