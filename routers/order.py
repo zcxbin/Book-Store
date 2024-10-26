@@ -19,7 +19,11 @@ def get_all_orders(
     try:
         if user.role != 'admin':
             return raise_error(401)
-        return order_service.get_all_orders(db)
+
+        orders = order_service.get_all_orders(db)
+        if not orders:
+            return raise_error(501)
+        return orders
     except Exception as e:
         print(e)
 
@@ -31,7 +35,10 @@ async def get_order_by_user_id(
         order_service=Depends(get_order_service)
 ):
     try:
-        return order_service.get_order_by_user_id(db, user.id)
+        orders = order_service.get_order_by_user_id(db, user.id)
+        if not orders:
+            return raise_error(501)
+        return orders
     except Exception as e:
         print(e)
 

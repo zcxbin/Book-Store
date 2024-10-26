@@ -6,6 +6,7 @@ ERROR_CODES = {
     301: 'Not enough book quantity',
     302: 'Book quantity order incorrect',
     401: 'You dont have admin permission',
+    501: 'You don\'t have any orders'
 }
 
 
