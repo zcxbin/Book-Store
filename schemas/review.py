@@ -23,6 +23,7 @@ class Review(BaseModel):
     class Config:
         from_attributes = True
 
+
 class ReviewUpdate(BaseModel):
     rating: int
     comment: str
@@ -35,8 +36,10 @@ class ReviewUpdateResponse(BaseModel):
     rating: int
     comment: str
     created_at: str
+
     class Config:
         from_attributes = True
+
 
 class ReviewResponse(BaseModel):
     data: List[Review] = []
