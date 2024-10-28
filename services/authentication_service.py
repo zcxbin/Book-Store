@@ -1,6 +1,9 @@
+from fastapi import HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy import Update
 from sqlalchemy.orm import Session
+from starlette import status
+
 from schemas.user import User as UserSchema
 from models.user import User as UserModel
 from schemas.authentication import Token, Register, UpdateUser
@@ -20,9 +23,9 @@ class AuthenticationService:
         user = db.query(UserModel).filter(UserModel.username == login_data.username).first()
         role = db.query(RoleModel).filter(RoleModel.id == user.role_id).first()
         if not user:
-            return None
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='User not found')
         if not verify_password(login_data.password, user.password):
-            return None
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Incorrect password')
         print(user.username, role.role_name, user.id)
 
         access_token = create_access_token(data={
