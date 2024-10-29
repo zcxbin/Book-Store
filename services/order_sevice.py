@@ -72,6 +72,8 @@ class OrderService:
 
         order_item_models = db.query(OrderItem).filter(OrderItem.order_id == order_id).all()
         for item in order_item_models:
+            book_model = db.query(BookModel).filter(BookModel.id == item.book_id).first()
+            book_model.quantity += item.quantity
             db.delete(item)
         db.delete(order_model)
         db.commit()

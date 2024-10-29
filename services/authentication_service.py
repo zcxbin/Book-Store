@@ -1,6 +1,5 @@
 from fastapi import HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
-from sqlalchemy import Update
 from sqlalchemy.orm import Session
 from starlette import status
 
