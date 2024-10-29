@@ -71,6 +71,7 @@ async def update_order_status(
     except Exception as e:
         print(e)
 
+
 @router.delete('/delete_orders')
 async def delete_order(
         order_id: int,

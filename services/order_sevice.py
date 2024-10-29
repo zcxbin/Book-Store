@@ -32,7 +32,6 @@ class OrderService:
         db.commit()
         return db.query(OrderModel).all()
 
-
     def create_order(self, db: Session, order: OrderItemCreate, user_id: int) -> list[Type[Order]]:
         total_amount = 0
 
@@ -86,4 +85,3 @@ class OrderService:
         db.commit()
 
         return db.query(OrderModel).filter(OrderModel.user_id == user_id).all()
-
