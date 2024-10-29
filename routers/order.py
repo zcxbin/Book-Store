@@ -56,6 +56,21 @@ async def create_order(
         print(e)
 
 
+@router.put('/update_order_status')
+async def update_order_status(
+        status: str,
+        order_id: int,
+        user=Depends(get_current_user),
+        db=Depends(get_db),
+        order_service=Depends(get_order_service)
+):
+    try:
+        if user.role != 'admin':
+            return raise_error(401)
+        return order_service.update_order_status(db, order_id, status)
+    except Exception as e:
+        print(e)
+
 @router.delete('/delete_orders')
 async def delete_order(
         order_id: int,
