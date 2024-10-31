@@ -26,6 +26,12 @@ class OrderService:
     def get_order_by_user_id(self, db: Session, user_id: int) -> list[Type[Order]]:
         return db.query(OrderModel).filter(OrderModel.user_id == user_id).all()
 
+    def update_order_status(self, db: Session, order_id: int, status: str) -> list[Type[Order]]:
+        order = db.query(OrderModel).filter(OrderModel.id == order_id).first()
+        order.status = status
+        db.commit()
+        return db.query(OrderModel).all()
+
     def create_order(self, db: Session, order: OrderItemCreate, user_id: int) -> list[Type[Order]]:
         total_amount = 0
 
@@ -72,9 +78,10 @@ class OrderService:
 
         order_item_models = db.query(OrderItem).filter(OrderItem.order_id == order_id).all()
         for item in order_item_models:
+            book_model = db.query(BookModel).filter(BookModel.id == item.book_id).first()
+            book_model.quantity += item.quantity
             db.delete(item)
         db.delete(order_model)
         db.commit()
 
         return db.query(OrderModel).filter(OrderModel.user_id == user_id).all()
-
