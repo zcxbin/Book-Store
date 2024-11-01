@@ -1,8 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
-from flask import Flask, request, jsonify
 
 from configs.database import get_db
-from schemas.book import BookResponse, Book as BookSchema
+from schemas.book import BookResponse
 from services.book_service import get_book_service
 
 router = APIRouter()
