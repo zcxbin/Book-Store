@@ -14,6 +14,9 @@ def get_book_service():
 
 class BookService:
 
+    def search_books(self, db: Session, search_text: str):
+        return db.query(BookModel).filter(BookModel.title.ilike(f"%{search_text}%")).all()
+
     def get_all_books(self, db: Session):
         return db.query(BookModel).all()
 
