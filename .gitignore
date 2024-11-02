@@ -2,7 +2,7 @@
 *.log
 *.pot
 *.pyc
-__pycache__/
+__pycache__
 db.sqlite3
 media
 
@@ -119,3 +119,4 @@ Documents/~$*.docx
 ~$*.xlsx
 
 .idea/
+__pycache__/

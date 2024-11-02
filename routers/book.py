@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
 
 from configs.database import get_db
 from schemas.book import BookResponse
@@ -53,3 +52,19 @@ async def get_books_by_category_id(
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail="An error occurred while fetching books by category_id name.")
+
+
+@router.get('/search_books')
+def search_books(
+        search_text: str,
+        db=Depends(get_db),
+        book_service=Depends(get_book_service)
+):
+    try:
+        results = book_service.search_books(db, search_text)
+        if not results:
+            raise HTTPException(status_code=404, detail="Book not found")
+        return results
+
+    except Exception as e:
+        print(e)
