@@ -17,8 +17,8 @@ from typing import Any, NoReturn
 from fastapi.responses import HTMLResponse
 from configs import authentication
 
+cache_key_messages = "cache_messages"
 redis_client = redis.Redis(host = 'localhost', port = 6379, db = 0)
-
 connected_users = {}
 app = FastAPI()
 
@@ -38,7 +38,7 @@ async def on_receive(room: Room, websocket: WebSocket, message: Any) -> None:
     username = connected_users.get(websocket.client.host)
     try:
         print("{}:{} just sent '{}'".format(username, websocket.client.port, message))
-        value = await redis_client.get("cache_messages")
+        value = await redis_client.get(cache_key_messages)
         if not value:
             messages = {
                 "messages": []
@@ -49,10 +49,10 @@ async def on_receive(room: Room, websocket: WebSocket, message: Any) -> None:
                 "time": datetime.now()
                 }
                 )
-            await redis_client.set("cache_messages", json.dumps(messages))
+            await redis_client.set(cache_key_messages, json.dumps(messages))
 
         elif value:
-            value = await redis_client.get("cache_messages")
+            value = await redis_client.get(cache_key_messages)
             value = json.loads(value)
             value["messages"].append({
                 "user_name": username,
@@ -62,7 +62,7 @@ async def on_receive(room: Room, websocket: WebSocket, message: Any) -> None:
                 )
             if len(value["messages"]) > 100:
                 value["messages"].pop(0)
-            await redis_client.set("cache_messages", json.dumps(value))
+            await redis_client.set(cache_key_messages, json.dumps(value))
 
         await room.push_text(f"{username}: {message}")
 
@@ -112,7 +112,7 @@ async def connect_websocket(websocket: WebSocket, room: Room = Depends(time_room
 async def get_data():
     """Lấy dữ liệu từ Redis"""
     try:
-        value = await redis_client.get("cache_messages")
+        value = await redis_client.get(cache_key_messages)
         if value:
             value = json.loads(value)
             return value["messages"]
