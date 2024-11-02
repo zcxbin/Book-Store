@@ -1,7 +1,9 @@
+import json
 from datetime import datetime
 from http.client import HTTPException
 
-from configs.authentication import get_current_user
+import redis.asyncio as redis
+
 from routers.authentication import router as authentication_router
 from routers.book import router as book_router
 from routers.review import router as review_router
@@ -15,7 +17,8 @@ from typing import Any, NoReturn
 from fastapi.responses import HTMLResponse
 from configs import authentication
 
-messages_cache = []
+redis_client = redis.Redis(host = 'localhost', port = 6379, db = 0)
+
 connected_users = {}
 app = FastAPI()
 
@@ -35,17 +38,36 @@ async def on_receive(room: Room, websocket: WebSocket, message: Any) -> None:
     username = connected_users.get(websocket.client.host)
     try:
         print("{}:{} just sent '{}'".format(username, websocket.client.port, message))
-        messages_cache.append({
-            "user_name": username,
-            "message": message,
-            "time": datetime.now()
-            }
-            )
-        if len(messages_cache) > 100:
-            messages_cache.pop(0)
+        value = await redis_client.get("cache_messages")
+        if not value:
+            messages = {
+                "messages": []
+                }
+            messages["messages"].append({
+                "user_name": username,
+                "message": message,
+                "time": datetime.now()
+                }
+                )
+            await redis_client.set("cache_messages", json.dumps(messages))
+
+        elif value:
+            value = await redis_client.get("cache_messages")
+            value = json.loads(value)
+            value["messages"].append({
+                "user_name": username,
+                "message": message,
+                "time": datetime.now()
+                }
+                )
+            if len(value["messages"]) > 100:
+                value["messages"].pop(0)
+            await redis_client.set("cache_messages", json.dumps(value))
+
         await room.push_text(f"{username}: {message}")
+
     except Exception as ex:
-        print("Exception: " + str(ex))
+        raise HTTPException(ex)
         pass
 
 
@@ -86,6 +108,15 @@ async def connect_websocket(websocket: WebSocket, room: Room = Depends(time_room
     await room.connect(websocket)
 
 
-@app.get("/get_messages")
-async def get_messages():
-    return messages_cache
+@app.get("/get_messages/")
+async def get_data():
+    """Lấy dữ liệu từ Redis"""
+    try:
+        value = await redis_client.get("cache_messages")
+        if value:
+            value = json.loads(value)
+            return value["messages"]
+        else:
+            return {"message": "Không tìm thấy dữ liệu"}
+    except Exception as e:
+        raise HTTPException(status_code = 500, detail = str(e))
