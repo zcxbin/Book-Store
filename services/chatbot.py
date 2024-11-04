@@ -31,7 +31,7 @@ def gpt_response(message: str, db, book_service):
     {promotions_info}
     trong câu trả lời nếu có \n thay \n bằng \", \"
     Nếu không có sách nào trong cửa hàng thì trả lời là hiện tại không có cuốn sách nào được bày bán tại cửa hàng!
-    Nếu không có thông tin về một vấn đề trong ngữ cảnh trên, hãy trả lời: 'Hiện tại em chưa thế trả lời câu hỏi này, a/c có câu hỏi nào khác cần em giải đáp không ạ!'.
+    '.
     """
 
     # Gọi API OpenAI để chatbot trả lời
