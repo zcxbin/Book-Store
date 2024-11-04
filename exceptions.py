@@ -8,11 +8,11 @@ ERROR_CODES = {
     401: 'You dont have admin permission',
     501: 'You don\'t have any orders',
     601: 'Account is not exist or password is incorrect',
-}
+    }
 
 
 def raise_error(error_code: int) -> BaseResponse:
     return BaseResponse(
-        message=ERROR_CODES.get(error_code),
-        status='error',
-    )
+        message = ERROR_CODES.get(error_code),
+        status = 'error',
+        )

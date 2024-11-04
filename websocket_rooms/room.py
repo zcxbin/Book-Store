@@ -1,9 +1,10 @@
 from __future__ import annotations
+
 import asyncio
-from enum import Enum
 import inspect
 import json
 import logging
+from enum import Enum
 from typing import (
     Any,
     Callable,
@@ -13,7 +14,8 @@ from typing import (
     Tuple,
     Union,
     NoReturn,
-)
+    )
+
 from starlette.websockets import WebSocketState, Message, WebSocket, WebSocketDisconnect
 
 
@@ -144,7 +146,7 @@ class Room:
                 if websocket.application_state != WebSocketState.CONNECTED:
                     raise RuntimeError(
                         'WebSocket is not connected. Need to call "accept" first.'
-                    )
+                        )
                 message: Message = await websocket.receive()
                 logging.info(message)
                 websocket._raise_on_disconnect(message)
@@ -173,7 +175,7 @@ class Room:
                         await func_res
 
         except WebSocketDisconnect:
-            await self.remove(websocket, closed=True)
+            await self.remove(websocket, closed = True)
 
     async def remove(self, websocket: WebSocket, closed: bool = False) -> None:
         """
@@ -202,8 +204,8 @@ class Room:
             await self.remove(websocket)
 
     def on_receive(
-        self, mode: Room.RECEIVE_TYPES = ReceiveType.TEXT.value
-    ) -> Callable[[Room, WebSocket, Any], None]:
+            self, mode: Room.RECEIVE_TYPES = ReceiveType.TEXT.value
+            ) -> Callable[[Room, WebSocket, Any], None]:
         """
         The decorator to specify the callbacks that will be run when a message is received from client websocket.
 
@@ -225,7 +227,7 @@ class Room:
         if not mode in ["text", "bytes", "json"]:
             raise RuntimeError(
                 'The "mode" argument should be "text", "bytes" or "json".'
-            )
+                )
 
         def inner(func: Callable[[Room, WebSocket, Any], None]):
             self._on_receive[mode] = func
@@ -234,8 +236,8 @@ class Room:
         return inner
 
     def on_connect(
-        self, mode: Literal["before", "after"] = "after"
-    ) -> Callable[[Room, WebSocket], None]:
+            self, mode: Literal["before", "after"] = "after"
+            ) -> Callable[[Room, WebSocket], None]:
         """
         The decorator to specify the callbacks that will run on websockets connection.
 
@@ -263,8 +265,8 @@ class Room:
         return inner
 
     def on_disconnect(
-        self, mode: Literal["before", "after"] = "after"
-    ) -> Callable[[Room, WebSocket], None]:
+            self, mode: Literal["before", "after"] = "after"
+            ) -> Callable[[Room, WebSocket], None]:
         """
         The decorator to specify the callbacks that will run on websockets disconnect.
 

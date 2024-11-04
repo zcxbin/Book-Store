@@ -1,15 +1,15 @@
 from datetime import datetime
-from typing import List, Type
+from typing import Type
 
 from sqlalchemy import and_
 from sqlalchemy.orm import Session
 
 from exceptions import raise_error
+from models.book import Book as BookModel
 from models.order import Order as OrderModel
 from models.order_item import OrderItem
-from schemas.order import OrderResponse, OrderItemCreate, Order
 from models.user import User as UserModel
-from models.book import Book as BookModel
+from schemas.order import OrderItemCreate, Order
 
 
 def get_order_service():
@@ -38,7 +38,7 @@ class OrderService:
         current_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         is_valid = True
         user_model = db.query(UserModel).filter(UserModel.id == user_id).first()
-        new_order = OrderModel(user_id=user_id, order_date=current_date)
+        new_order = OrderModel(user_id = user_id, order_date = current_date)
 
         for item in order.items:
             if item.quantity < 0:
@@ -52,11 +52,11 @@ class OrderService:
             else:
                 total_amount += book_model.price * item.quantity
                 order_item_model = OrderItem(
-                    book_id=book_model.id,
-                    order_id=new_order.id,
-                    quantity=item.quantity,
-                    price=book_model.price,
-                )
+                    book_id = book_model.id,
+                    order_id = new_order.id,
+                    quantity = item.quantity,
+                    price = book_model.price,
+                    )
                 book_model.quantity -= item.quantity
                 new_order.order_items.append(order_item_model)
 
@@ -72,7 +72,8 @@ class OrderService:
         order_model = db.query(OrderModel).filter(and_(
             OrderModel.user_id == user_id,
             OrderModel.id == order_id,
-        )).first()
+            )
+            ).first()
         if order_model is None:
             raise_error(404)
 

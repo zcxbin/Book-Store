@@ -1,12 +1,14 @@
+import os
 from datetime import timedelta, datetime, timezone
+
 import jwt
+from dotenv import load_dotenv
 from fastapi import Depends, HTTPException
+from fastapi.security import OAuth2PasswordBearer
 from jwt import PyJWTError
 from passlib.context import CryptContext
-from fastapi.security import OAuth2PasswordBearer
-from dotenv import load_dotenv
-import os
 from starlette import status
+
 from schemas.authentication import TokenData
 
 load_dotenv()

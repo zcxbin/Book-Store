@@ -1,4 +1,4 @@
-from fastapi import Depends, APIRouter, HTTPException
+from fastapi import Depends, APIRouter
 
 from configs.authentication import get_current_user
 from configs.database import get_db
@@ -11,10 +11,10 @@ router = APIRouter()
 
 @router.get('/get_all_permission')
 async def get_all_permission(
-        user=Depends(get_current_user),
-        db=Depends(get_db),
-        permission_service=Depends(get_permission_service),
-):
+        user = Depends(get_current_user),
+        db = Depends(get_db),
+        permission_service = Depends(get_permission_service),
+        ):
     try:
         if user.role != 'admin':
             return raise_error(401)
@@ -26,10 +26,10 @@ async def get_all_permission(
 @router.post('/create_permission')
 async def create_permission(
         permission_data: PermissionCreate,
-        permission_service=Depends(get_permission_service),
-        db=Depends(get_db),
-        user=Depends(get_current_user)
-):
+        permission_service = Depends(get_permission_service),
+        db = Depends(get_db),
+        user = Depends(get_current_user)
+        ):
     try:
         if user.role != 'admin':
             return raise_error(401)
@@ -42,10 +42,10 @@ async def create_permission(
 async def update_permission(
         permission_id: int,
         permission_data: PermissionUpdate,
-        permission_service=Depends(get_permission_service),
-        db=Depends(get_db),
-        user=Depends(get_current_user)
-):
+        permission_service = Depends(get_permission_service),
+        db = Depends(get_db),
+        user = Depends(get_current_user)
+        ):
     try:
         if user.role != 'admin':
             return raise_error(401)
@@ -57,10 +57,10 @@ async def update_permission(
 @router.delete('/delete_permission')
 async def delete_permission(
         permission_id: int,
-        permission_service=Depends(get_permission_service),
-        db=Depends(get_db),
-        user=Depends(get_current_user)
-):
+        permission_service = Depends(get_permission_service),
+        db = Depends(get_db),
+        user = Depends(get_current_user)
+        ):
     try:
         if user.role != 'admin':
             return raise_error(401)

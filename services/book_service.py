@@ -1,8 +1,9 @@
 from sqlalchemy.orm import Session
+
 from exceptions import raise_error
 from models import Category as CategoryModel
-from models.book import Book as BookModel
 from models.author import Author as AuthorModel
+from models.book import Book as BookModel
 
 
 def get_book_service():
@@ -22,7 +23,8 @@ class BookService:
 
     def get_books_by_author_id(self, db: Session, author_id: int):
         author_model = db.query(AuthorModel).filter(
-            AuthorModel.id == author_id).first()
+            AuthorModel.id == author_id
+            ).first()
 
         if not author_model:
             raise_error(101)
@@ -31,7 +33,8 @@ class BookService:
 
     def get_books_by_category_id(self, db: Session, category_id: int):
         category_model = db.query(CategoryModel).filter(
-            CategoryModel.id == category_id).first()
+            CategoryModel.id == category_id
+            ).first()
 
         if not category_model:
             raise_error(201)

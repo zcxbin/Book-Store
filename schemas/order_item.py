@@ -7,4 +7,3 @@ class OrderItem(BaseModel):
 
     class Config:
         from_attributes: True
-

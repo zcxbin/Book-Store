@@ -24,4 +24,3 @@ class RolePermissionUpdate(BaseModel):
 
     class Config:
         from_attributes = True
-
