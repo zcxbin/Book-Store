@@ -12,3 +12,4 @@ from .role_permission import RolePermission
 from .shipping import Shipping
 from .user import User
 from .wish_list import WishList
+from configs.database import Base
