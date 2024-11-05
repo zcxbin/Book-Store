@@ -14,7 +14,7 @@ cache_key_messages = "cache_messages"
 
 connected_users = {}
 
-redis_client = redis.Redis(host = 'localhost', port = 6379, db = 0)
+redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
 
 @time_room.on_receive("text")
@@ -25,23 +25,25 @@ async def on_receive(room: Room, websocket: WebSocket, message: Any) -> None:
         value = await redis_client.get(cache_key_messages)
         if not value:
             messages = []
-            messages.append({
-                "user_name": username,
-                "message": message,
-                "time": datetime.now()
+            messages.append(
+                {
+                    "user_name": username,
+                    "message": message,
+                    "time": datetime.now()
                 }
-                )
+            )
             await redis_client.set(cache_key_messages, json.dumps(messages))
 
         elif value:
             value = await redis_client.get(cache_key_messages)
             value = json.loads(value)
-            value.append({
-                "user_name": username,
-                "message": message,
-                "time": datetime.now()
+            value.append(
+                {
+                    "user_name": username,
+                    "message": message,
+                    "time": datetime.now()
                 }
-                )
+            )
             if len(value) > 100:
                 value.pop(0)
             await redis_client.set(cache_key_messages, json.dumps(value))

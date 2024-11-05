@@ -7,7 +7,7 @@ from fastapi import APIRouter
 from routers.websocket_handlers import cache_key_messages
 
 router = APIRouter()
-redis_client = redis.Redis(host = 'localhost', port = 6379, db = 0)
+redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
 
 @router.get("/get_messages/")

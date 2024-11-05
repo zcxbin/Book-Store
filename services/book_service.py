@@ -24,7 +24,7 @@ class BookService:
     def get_books_by_author_id(self, db: Session, author_id: int):
         author_model = db.query(AuthorModel).filter(
             AuthorModel.id == author_id
-            ).first()
+        ).first()
 
         if not author_model:
             raise_error(101)
@@ -34,7 +34,7 @@ class BookService:
     def get_books_by_category_id(self, db: Session, category_id: int):
         category_model = db.query(CategoryModel).filter(
             CategoryModel.id == category_id
-            ).first()
+        ).first()
 
         if not category_model:
             raise_error(201)

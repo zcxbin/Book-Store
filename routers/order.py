@@ -11,10 +11,10 @@ router = APIRouter()
 
 @router.get('/get_all_orders')
 def get_all_orders(
-        db = Depends(get_db),
-        user = Depends(get_current_user),
-        order_service = Depends(get_order_service)
-        ):
+        db=Depends(get_db),
+        user=Depends(get_current_user),
+        order_service=Depends(get_order_service)
+):
     try:
         if user.role != 'admin':
             return raise_error(401)
@@ -29,10 +29,10 @@ def get_all_orders(
 
 @router.get('/get_order_by_user_id')
 async def get_order_by_user_id(
-        user = Depends(get_current_user),
-        db = Depends(get_db),
-        order_service = Depends(get_order_service)
-        ):
+        user=Depends(get_current_user),
+        db=Depends(get_db),
+        order_service=Depends(get_order_service)
+):
     try:
         orders = order_service.get_order_by_user_id(db, user.id)
         if not orders:
@@ -45,10 +45,10 @@ async def get_order_by_user_id(
 @router.post('/create_orders')
 async def create_order(
         order: OrderItemCreate,
-        user = Depends(get_current_user),
-        db = Depends(get_db),
-        order_service = Depends(get_order_service)
-        ):
+        user=Depends(get_current_user),
+        db=Depends(get_db),
+        order_service=Depends(get_order_service)
+):
     try:
         return order_service.create_order(db, order, user.id)
     except Exception as e:
@@ -59,10 +59,10 @@ async def create_order(
 async def update_order_status(
         status: str,
         order_id: int,
-        user = Depends(get_current_user),
-        db = Depends(get_db),
-        order_service = Depends(get_order_service)
-        ):
+        user=Depends(get_current_user),
+        db=Depends(get_db),
+        order_service=Depends(get_order_service)
+):
     try:
         if user.role != 'admin':
             return raise_error(401)
@@ -74,10 +74,10 @@ async def update_order_status(
 @router.delete('/delete_orders')
 async def delete_order(
         order_id: int,
-        user = Depends(get_current_user),
-        db = Depends(get_db),
-        order_service = Depends(get_order_service)
-        ):
+        user=Depends(get_current_user),
+        db=Depends(get_db),
+        order_service=Depends(get_order_service)
+):
     try:
         return order_service.delete_order_by_user_id(db, user.id, order_id)
     except Exception as e:

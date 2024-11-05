@@ -20,9 +20,9 @@ class RolePermissionService:
     def create_role_permission(self, db: Session, role_permission: RolePermissionCreate) -> \
             list[Type[RolePermissionSchema]]:
         new_role_permission = RolePermissionModel(
-            role_id = role_permission.role_id,
-            permission_id = role_permission.permission_id,
-            )
+            role_id=role_permission.role_id,
+            permission_id=role_permission.permission_id,
+        )
 
         db.add(new_role_permission)
         db.commit()
@@ -33,7 +33,7 @@ class RolePermissionService:
                                role_permission_id: int) -> list[Type[RolePermissionSchema]]:
         role_permission_model = db.query(RolePermissionModel).filter(
             RolePermissionModel.id == role_permission_id
-            ).first()
+        ).first()
         role_permission_model.permission_id = role_permission_update.permission_id
         role_permission_model.role_id = role_permission_update.role_id
         db.commit()
@@ -43,7 +43,7 @@ class RolePermissionService:
     def delete_role_permission(self, db: Session, role_permission_id: int) -> list[Type[RolePermissionSchema]]:
         role_permission_model = db.query(RolePermissionModel).filter(
             role_permission_id == RolePermissionModel.id
-            ).first()
+        ).first()
         db.delete(role_permission_model)
         db.commit()
         return db.query(RolePermissionModel).all()

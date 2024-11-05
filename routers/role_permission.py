@@ -11,10 +11,10 @@ router = APIRouter()
 
 @router.get("/get_all_permission")
 async def get_all_permission(
-        db = Depends(get_db),
-        user = Depends(get_current_user),
-        role_permission_service = Depends(get_role_permission_service)
-        ):
+        db=Depends(get_db),
+        user=Depends(get_current_user),
+        role_permission_service=Depends(get_role_permission_service)
+):
     try:
         if user.role != 'admin':
             return raise_error(401)
@@ -26,10 +26,10 @@ async def get_all_permission(
 @router.post("/create_role_permission")
 async def create_role_permission(
         role_permission_create: RolePermissionCreate,
-        db = Depends(get_db),
-        user = Depends(get_current_user),
-        role_permission_service = Depends(get_role_permission_service)
-        ):
+        db=Depends(get_db),
+        user=Depends(get_current_user),
+        role_permission_service=Depends(get_role_permission_service)
+):
     try:
         if user.role != 'admin':
             return raise_error(401)
@@ -42,10 +42,10 @@ async def create_role_permission(
 async def update_role_permission(
         role_permission_id: int,
         role_permission_update: RolePermissionUpdate,
-        db = Depends(get_db),
-        user = Depends(get_current_user),
-        role_permission_service = Depends(get_role_permission_service)
-        ):
+        db=Depends(get_db),
+        user=Depends(get_current_user),
+        role_permission_service=Depends(get_role_permission_service)
+):
     try:
         if user.role != 'admin':
             return raise_error(401)
@@ -57,10 +57,10 @@ async def update_role_permission(
 @router.delete("/delete_role_permission")
 async def delete_role_permission(
         role_permission_id: int,
-        db = Depends(get_db),
-        user = Depends(get_current_user),
-        role_permission_service = Depends(get_role_permission_service)
-        ):
+        db=Depends(get_db),
+        user=Depends(get_current_user),
+        role_permission_service=Depends(get_role_permission_service)
+):
     try:
         if user.role != 'admin':
             return raise_error(401)

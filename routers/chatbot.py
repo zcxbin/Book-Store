@@ -8,5 +8,5 @@ router = APIRouter()
 
 
 @router.post("/chatbot/")
-async def chatbot_response(message: str, db = Depends(get_db), book_service = Depends(get_book_service)):
+async def chatbot_response(message: str, db=Depends(get_db), book_service=Depends(get_book_service)):
     return gpt_response(message, db, book_service)

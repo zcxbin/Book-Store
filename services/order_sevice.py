@@ -38,7 +38,7 @@ class OrderService:
         current_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         is_valid = True
         user_model = db.query(UserModel).filter(UserModel.id == user_id).first()
-        new_order = OrderModel(user_id = user_id, order_date = current_date)
+        new_order = OrderModel(user_id=user_id, order_date=current_date)
 
         for item in order.items:
             if item.quantity < 0:
@@ -52,11 +52,11 @@ class OrderService:
             else:
                 total_amount += book_model.price * item.quantity
                 order_item_model = OrderItem(
-                    book_id = book_model.id,
-                    order_id = new_order.id,
-                    quantity = item.quantity,
-                    price = book_model.price,
-                    )
+                    book_id=book_model.id,
+                    order_id=new_order.id,
+                    quantity=item.quantity,
+                    price=book_model.price,
+                )
                 book_model.quantity -= item.quantity
                 new_order.order_items.append(order_item_model)
 
@@ -69,11 +69,12 @@ class OrderService:
         return db.query(OrderModel).filter(OrderModel.user_id == user_id).all()
 
     def delete_order_by_user_id(self, db: Session, user_id: int, order_id: int) -> list[Type[Order]]:
-        order_model = db.query(OrderModel).filter(and_(
-            OrderModel.user_id == user_id,
-            OrderModel.id == order_id,
+        order_model = db.query(OrderModel).filter(
+            and_(
+                OrderModel.user_id == user_id,
+                OrderModel.id == order_id,
             )
-            ).first()
+        ).first()
         if order_model is None:
             raise_error(404)
 

@@ -17,9 +17,9 @@ class PermissionService:
 
     def create_permission(self, db: Session, permission: PermissionCreate) -> PermissionSchema:
         new_permission = PermissionModel(
-            activity = permission.activity,
-            description = permission.description,
-            )
+            activity=permission.activity,
+            description=permission.description,
+        )
         db.add(new_permission)
         db.commit()
         db.refresh(new_permission)
