@@ -14,7 +14,7 @@ async def chatbot_response(
         db = Depends(get_db),
         book_service = Depends(get_book_service),
         chatbot_service = Depends(get_chatbot_service),
-        # user_service = Depends(get_current_user)
+        user_service = Depends(get_current_user)
         ):
     try:
         return chatbot_service.gpt_response(message, db, book_service)
