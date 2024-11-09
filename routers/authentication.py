@@ -9,8 +9,8 @@ from services.authentication_service import get_authentication_service
 router = APIRouter()
 
 
-@router.post('/login')
-def login(login_data: LoginReq, authentication_service=Depends(get_authentication_service)
+@router.post('/swagger-login')
+def login(login_data=Depends(OAuth2PasswordRequestForm), authentication_service=Depends(get_authentication_service)
           , db=Depends(get_db)):
     try:
         response = authentication_service.authenticate_user(login_data, db)
@@ -18,16 +18,28 @@ def login(login_data: LoginReq, authentication_service=Depends(get_authenticatio
     except Exception as e:
         return e
 
+
+@router.post('/login')
+def login(login_data: LoginReq, authentication_service=Depends(get_authentication_service)
+          , db=Depends(get_db)):
+    try:
+        response = authentication_service.login(login_data, db)
+        return response
+    except Exception as e:
+        return e
+
+
 @router.get("/get_user_by_id")
 def get_user_by_id(
-    id: int,
-    authentication_service=Depends(get_authentication_service), 
-    db=Depends(get_db)
+        id: int,
+        authentication_service=Depends(get_authentication_service),
+        db=Depends(get_db)
 ):
     try:
         return authentication_service.get_user_by_id(id, db)
     except Exception as e:
         return e
+
 
 @router.post('/register')
 def register(register_data: Register,

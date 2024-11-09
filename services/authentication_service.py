@@ -50,6 +50,34 @@ class AuthenticationService:
             access_token=access_token,
             user=user_out
         )
+    def login(self, login_data: LoginReq, db: Session) -> Token:
+        user = db.query(UserModel).filter(UserModel.username == login_data.username).first()
+        role = db.query(RoleModel).filter(RoleModel.id == user.role_id).first()
+        if not user:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='User not found')
+        if not verify_password(login_data.password, user.password):
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Incorrect password')
+        print(user.username, role.role_name, user.id)
+
+        user_out = {
+            "id": user.id,
+            "username": user.username,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "phone_number": user.phone_number,
+            "address": user.address,
+            "role_id": user.role_id
+        }
+        access_token = create_access_token(data={
+            'username': user.username,
+            'role': role.role_name,
+            'id': user.id
+        })
+        return Token(
+            access_token=access_token,
+            user=user_out
+        )
     
     def get_user_by_id(self, id: int, db: Session):
         try:
