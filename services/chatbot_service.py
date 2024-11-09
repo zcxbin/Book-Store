@@ -35,6 +35,7 @@ class ChatbotService:
         {promotions_info}
     
         # Yêu cầu: Khi khách hàng hỏi về danh sách sách, chỉ liệt kê tên sách và tên tác giả, không xuống dòng và không dùng ký tự đặc biệt. Nếu khách hàng yêu cầu thêm, cung cấp thông tin chi tiết hơn.
+        Nếu chưa có gì trong ưu đãi thì trả lời là hiện tại chúng tôi không có chương trình khuyến mãi nào.
         """
 
         # Gọi API OpenAI để chatbot trả lời

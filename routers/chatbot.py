@@ -11,11 +11,11 @@ router = APIRouter()
 @router.post("/chatbot/")
 async def chatbot_response(
         message: str,
-        db=Depends(get_db),
-        book_service=Depends(get_book_service),
-        chatbot_service=Depends(get_chatbot_service),
-        user_service=Depends(get_current_user)
-):
+        db = Depends(get_db),
+        book_service = Depends(get_book_service),
+        chatbot_service = Depends(get_chatbot_service),
+        # user_service = Depends(get_current_user)
+        ):
     try:
         return chatbot_service.gpt_response(message, db, book_service)
     except Exception as e:
