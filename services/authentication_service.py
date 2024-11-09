@@ -5,7 +5,7 @@ from starlette import status
 
 from schemas.user import User as UserSchema
 from models.user import User as UserModel
-from schemas.authentication import Token, Register, UpdateUser
+from schemas.authentication import Token, Register, UpdateUser, LoginReq, UserOut
 from configs.authentication import verify_password, get_password_hash, create_access_token
 from models.role import Role as RoleModel
 from models.review import Review as ReviewModel
@@ -18,7 +18,7 @@ def get_authentication_service():
 
 
 class AuthenticationService:
-    def authenticate_user(self, login_data: OAuth2PasswordRequestForm, db: Session) -> Token:
+    def authenticate_user(self, login_data: LoginReq, db: Session) -> Token:
         user = db.query(UserModel).filter(UserModel.username == login_data.username).first()
         role = db.query(RoleModel).filter(RoleModel.id == user.role_id).first()
         if not user:
@@ -26,35 +26,56 @@ class AuthenticationService:
         if not verify_password(login_data.password, user.password):
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Incorrect password')
         print(user.username, role.role_name, user.id)
-
+        
+        user_out = {
+            "id": user.id,
+            "username": user.username,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "phone_number": user.phone_number,
+            "address": user.address,
+            "role_id": user.role_id
+        }
         access_token = create_access_token(data={
             'username': user.username,
             'role': role.role_name,
             'id': user.id
         })
-        return Token(access_token=access_token)
+        return Token(
+            access_token=access_token,
+            user=user_out
+        )
+    
+    def get_user_by_id(self, id: int, db: Session):
+        try:
+            return db.query(UserModel).filter(UserModel.id == id).first()
+        except Exception as e:
+            return e
 
     def register_user(self, register_data: Register, db: Session) -> UserSchema:
-        new_user = UserModel(
-            username=register_data.username,
-            email=register_data.email,
-            password=get_password_hash(register_data.password),
-            first_name=register_data.first_name,
-            last_name=register_data.last_name,
-            phone_number=register_data.phone_number,
-            address=register_data.address
-        )
-        db.add(new_user)
-        db.commit()
-        db.refresh(new_user)
-        role_model = db.query(RoleModel).filter(RoleModel.id == new_user.role_id).first()
-        return UserSchema(
-            id=new_user.id,
-            username=new_user.username,
-            email=new_user.email,
-            address=new_user.address,
-            role=role_model.role_name
-        )
+        try:
+            new_user = UserModel(
+                username=register_data.username,
+                email=register_data.email,
+                password=get_password_hash(register_data.password),
+                first_name=register_data.first_name,
+                last_name=register_data.last_name,
+                phone_number=register_data.phone_number,
+                address=register_data.address
+            )
+            db.add(new_user)
+            db.commit()
+            role_model = db.query(RoleModel).filter(RoleModel.id == new_user.role_id).first()
+            return UserSchema(
+                id=new_user.id,
+                username=new_user.username,
+                email=new_user.email,
+                address=new_user.address,
+                role=role_model.role_name
+            )
+        except Exception as e:
+            return e
 
     def update_user(self, update_data: UpdateUser, db: Session, user_id: int) -> UserSchema:
         user_model = db.query(UserModel).filter(UserModel.id == user_id).first()

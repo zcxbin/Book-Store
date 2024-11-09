@@ -13,11 +13,25 @@ from websocket_rooms import Room
 from fastapi import Depends, FastAPI, WebSocket
 from typing import Any, NoReturn
 from fastapi.responses import HTMLResponse
-from configs import authentication
+from fastapi.middleware.cors import CORSMiddleware
+from configs import authentication, database
+from configs.database import engine
 
 messages_cache = []
 connected_users = {}
+
+database.Base.metadata.create_all(bind=engine)
+
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 app.include_router(authentication_router, prefix = "/auth", tags = ["Authentication"])
 app.include_router(book_router, prefix = "/book", tags = ["Books"])

@@ -26,14 +26,13 @@ async def get_reviews_by_books(
 
 @router.post('/create_review')
 async def create_review(
-        book_id: int,
         review_data: ReviewCreate,
         user = Depends(get_current_user),
         db = Depends(get_db),
         review_service = Depends(get_review_service)
         ):
     try:
-        return review_service.create_review(review_data, db, user.id, book_id)
+        return review_service.create_review(review_data, db, user.id)
     except Exception as e:
         print(e)
 
@@ -54,12 +53,12 @@ async def update_review(
 
 @router.delete('/delete_review')
 async def delete_review(
-        book_id: int,
+        id: int,
         db = Depends(get_db),
         review_service = Depends(get_review_service),
         user = Depends(get_current_user)
         ):
     try:
-        return review_service.delete_review(db, user.id, book_id)
+        return review_service.delete_review(db, user.id, id)
     except Exception as e:
         print(e)

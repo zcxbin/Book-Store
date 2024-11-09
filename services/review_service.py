@@ -2,7 +2,7 @@ import traceback
 from datetime import datetime
 
 from sqlalchemy import and_
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from models import Review as ReviewModel
 from schemas.review import Review as ReviewSchema, ReviewCreate, ReviewResponse, ReviewUpdate, ReviewUpdateResponse
 
@@ -15,11 +15,11 @@ def get_review_service():
 
 
 class ReviewService:
-    def create_review(self, review: ReviewCreate, db: Session, user_id: int, book_id: int) -> ReviewSchema:
+    def create_review(self, review: ReviewCreate, db: Session, user_id: int) -> ReviewSchema:
         try:
             new_review = ReviewModel(
                 user_id=user_id,
-                book_id=book_id,
+                book_id=review.book_id,
                 rating=review.rating,
                 comment=review.comment,
                 created_at=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
@@ -41,7 +41,8 @@ class ReviewService:
 
     def get_reviews_by_books_id(self, db: Session, book_id: int) -> ReviewResponse:
         try:
-            return db.query(ReviewModel).filter(ReviewModel.book_id == book_id).all()
+            list = (db.query(ReviewModel).filter(ReviewModel.book_id == book_id).all())
+            return list
         except Exception as e:
             print(traceback.print_exc())
 
@@ -61,10 +62,10 @@ class ReviewService:
             created_at=update_review.created_at
         )
 
-    def delete_review(self, db: Session, user_id: int, book_id: int):
+    def delete_review(self, db: Session, user_id: int, id: int):
         review_to_delete = db.query(ReviewModel).filter(and_(
             ReviewModel.user_id == user_id,
-            ReviewModel.book_id == book_id
+            ReviewModel.id == id
         )).first()
 
         if review_to_delete:

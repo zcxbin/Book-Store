@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from exceptions import raise_error
 from models import Category as CategoryModel
 from models.book import Book as BookModel
@@ -16,6 +16,15 @@ class BookService:
 
     def search_books(self, db: Session, search_text: str):
         return db.query(BookModel).filter(BookModel.title.ilike(f"%{search_text}%")).all()
+    
+    def get_book_by_id(self, db: Session, id: int):
+        return (db.query(BookModel)
+                .options(
+                    joinedload(BookModel.categories),
+                    joinedload(BookModel.authors),
+                    joinedload(BookModel.publishers)
+                )
+                .filter(BookModel.id == id).first())
 
     def get_all_books(self, db: Session):
         return db.query(BookModel).all()
@@ -37,3 +46,7 @@ class BookService:
             raise_error(201)
 
         return db.query(BookModel).filter(BookModel.category_id == category_model.id).all()
+
+    def get_all_category(self, db: Session):
+        categories = db.query(CategoryModel).all()
+        return categories

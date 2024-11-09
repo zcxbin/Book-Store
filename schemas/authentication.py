@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from models import User
 
 
 class Register(BaseModel):
@@ -12,6 +13,19 @@ class Register(BaseModel):
 
     class Config:
         from_attributes = True
+
+class LoginReq(BaseModel):
+    username: str
+    password: str
+class UserOut(BaseModel):
+    id: int
+    username: str
+    email: str
+    first_name: str
+    last_name: str
+    phone_number: str
+    address: str
+    role_id: int
 
 
 class UpdateUser(BaseModel):
@@ -27,6 +41,10 @@ class UpdateUser(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str = 'Bearer'
+    user: UserOut
+    
+    class Config:
+        arbitrary_types_allowed=True
 
 
 class TokenData(BaseModel):

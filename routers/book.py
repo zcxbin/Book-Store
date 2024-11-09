@@ -18,6 +18,16 @@ async def get_books(db=Depends(get_db),
         print(e)
         raise HTTPException(status_code=500, detail="Book not found")
 
+@router.get("/get_book_by_id")
+def get_book_by_id(
+    id: int,
+    db=Depends(get_db),
+    book_service=Depends(get_book_service)
+):
+    try:
+        return book_service.get_book_by_id(db, id)
+    except Exception as e:
+        print(e)
 
 @router.get('/get_books_by_author_id', response_model=BookResponse)
 async def get_books_by_author_id(
@@ -66,5 +76,16 @@ def search_books(
             raise HTTPException(status_code=404, detail="Book not found")
         return results
 
+    except Exception as e:
+        print(e)
+
+@router.get("/category")
+def get_all_category(
+    db=Depends(get_db),
+    book_service=Depends(get_book_service)
+):
+    try:
+        results = book_service.get_all_category(db)
+        return results
     except Exception as e:
         print(e)
