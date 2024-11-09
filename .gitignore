@@ -120,3 +120,4 @@ Documents/~$*.docx
 
 .idea/
 __pycache__/
+*alembic*

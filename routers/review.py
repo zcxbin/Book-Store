@@ -8,18 +8,18 @@ from services.review_service import get_review_service
 router = APIRouter()
 
 
-@router.get('/get_reviews_by_books', response_model = ReviewResponse)
+@router.get('/get_reviews_by_books', response_model=ReviewResponse)
 async def get_reviews_by_books(
         book_id: int,
-        db = Depends(get_db),
-        review_service = Depends(get_review_service)
-        ):
+        db=Depends(get_db),
+        review_service=Depends(get_review_service)
+):
     try:
         reviews = review_service.get_reviews_by_books_id(db, book_id)
         return ReviewResponse(
-            data = reviews,
-            length = len(reviews)
-            )
+            data=reviews,
+            length=len(reviews)
+        )
     except Exception as e:
         print(e)
 
@@ -27,10 +27,10 @@ async def get_reviews_by_books(
 @router.post('/create_review')
 async def create_review(
         review_data: ReviewCreate,
-        user = Depends(get_current_user),
-        db = Depends(get_db),
-        review_service = Depends(get_review_service)
-        ):
+        user=Depends(get_current_user),
+        db=Depends(get_db),
+        review_service=Depends(get_review_service)
+):
     try:
         return review_service.create_review(review_data, db, user.id)
     except Exception as e:
@@ -41,10 +41,10 @@ async def create_review(
 async def update_review(
         book_id: int,
         review_update: ReviewUpdate,
-        db = Depends(get_db),
-        review_service = Depends(get_review_service),
-        user = Depends(get_current_user)
-        ):
+        db=Depends(get_db),
+        review_service=Depends(get_review_service),
+        user=Depends(get_current_user)
+):
     try:
         return review_service.update_review(db, review_update, user.id, book_id)
     except Exception as e:
@@ -53,11 +53,19 @@ async def update_review(
 
 @router.delete('/delete_review')
 async def delete_review(
+<<<<<<< HEAD
         id: int,
         db = Depends(get_db),
         review_service = Depends(get_review_service),
         user = Depends(get_current_user)
         ):
+=======
+        book_id: int,
+        db=Depends(get_db),
+        review_service=Depends(get_review_service),
+        user=Depends(get_current_user)
+):
+>>>>>>> origin/main
     try:
         return review_service.delete_review(db, user.id, id)
     except Exception as e:

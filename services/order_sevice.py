@@ -1,15 +1,15 @@
 from datetime import datetime
-from typing import List, Type
+from typing import Type
 
 from sqlalchemy import and_
 from sqlalchemy.orm import Session
 
 from exceptions import raise_error
+from models.book import Book as BookModel
 from models.order import Order as OrderModel
 from models.order_item import OrderItem
-from schemas.order import OrderResponse, OrderItemCreate, Order
 from models.user import User as UserModel
-from models.book import Book as BookModel
+from schemas.order import OrderItemCreate, Order
 
 
 def get_order_service():
@@ -69,10 +69,12 @@ class OrderService:
         return db.query(OrderModel).filter(OrderModel.user_id == user_id).all()
 
     def delete_order_by_user_id(self, db: Session, user_id: int, order_id: int) -> list[Type[Order]]:
-        order_model = db.query(OrderModel).filter(and_(
-            OrderModel.user_id == user_id,
-            OrderModel.id == order_id,
-        )).first()
+        order_model = db.query(OrderModel).filter(
+            and_(
+                OrderModel.user_id == user_id,
+                OrderModel.id == order_id,
+            )
+        ).first()
         if order_model is None:
             raise_error(404)
 

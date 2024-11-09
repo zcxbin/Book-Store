@@ -3,12 +3,16 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from starlette import status
 
-from schemas.user import User as UserSchema
+from configs.authentication import verify_password, get_password_hash, create_access_token
+from models.review import Review as ReviewModel
+from models.role import Role as RoleModel
 from models.user import User as UserModel
 from schemas.authentication import Token, Register, UpdateUser, LoginReq, UserOut
 from configs.authentication import verify_password, get_password_hash, create_access_token
 from models.role import Role as RoleModel
 from models.review import Review as ReviewModel
+from schemas.authentication import Token, Register, UpdateUser
+from schemas.user import User as UserSchema
 
 def get_authentication_service():
     try:

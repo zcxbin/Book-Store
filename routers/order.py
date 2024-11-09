@@ -1,10 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 
 from configs.authentication import get_current_user
 from configs.database import get_db
 from exceptions import raise_error
-from schemas.base_response import BaseResponse
-from schemas.order import OrderResponse, OrderItemCreate
+from schemas.order import OrderItemCreate
 from services.order_sevice import get_order_service
 
 router = APIRouter()

@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 from configs.authentication import get_current_user
 from configs.database import get_db
 from exceptions import raise_error
-from schemas.role_permission import RolePermission as RolePermissionSchema, RolePermissionUpdate, RolePermissionCreate
+from schemas.role_permission import RolePermissionUpdate, RolePermissionCreate
 from services.role_permission_service import get_role_permission_service
 
 router = APIRouter()

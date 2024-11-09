@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
-from exceptions import raise_error
-from schemas.permission import Permission as PermissionSchema, PermissionCreate, PermissionUpdate, PermissionResponse
+
 from models.permission import Permission as PermissionModel
+from schemas.permission import Permission as PermissionSchema, PermissionCreate, PermissionUpdate
 
 
 def get_permission_service():
@@ -9,6 +9,7 @@ def get_permission_service():
         yield PermissionService()
     finally:
         pass
+
 
 class PermissionService:
     def get_all_permissions(self, db: Session) -> list[type[PermissionSchema]]:
@@ -38,4 +39,3 @@ class PermissionService:
         db.delete(permission_model)
         db.commit()
         return db.query(PermissionModel).all()
-

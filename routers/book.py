@@ -12,8 +12,10 @@ async def get_books(db=Depends(get_db),
                     book_service=Depends(get_book_service)):
     try:
         books = book_service.get_all_books(db)
-        return BookResponse(books=books,
-                            length=len(books))
+        return BookResponse(
+            books=books,
+            length=len(books)
+            )
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail="Book not found")
