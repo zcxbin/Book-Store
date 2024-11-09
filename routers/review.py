@@ -53,19 +53,11 @@ async def update_review(
 
 @router.delete('/delete_review')
 async def delete_review(
-<<<<<<< HEAD
         id: int,
         db = Depends(get_db),
         review_service = Depends(get_review_service),
         user = Depends(get_current_user)
         ):
-=======
-        book_id: int,
-        db=Depends(get_db),
-        review_service=Depends(get_review_service),
-        user=Depends(get_current_user)
-):
->>>>>>> origin/main
     try:
         return review_service.delete_review(db, user.id, id)
     except Exception as e:
