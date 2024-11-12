@@ -64,10 +64,10 @@ class ReviewService:
             created_at=update_review.created_at
         )
 
-    def delete_review(self, db: Session, user_id: int, book_id: int):
+    def delete_review(self, db: Session, user_id: int, id: int):
         review_to_delete = db.query(ReviewModel).filter(and_(
             ReviewModel.user_id == user_id,
-            ReviewModel.book_id == book_id
+            ReviewModel.id == id
         )).first()
 
         if review_to_delete:

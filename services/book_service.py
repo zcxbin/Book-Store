@@ -21,8 +21,7 @@ class BookService:
         return (db.query(BookModel)
                 .options(
                     joinedload(BookModel.categories),
-                    joinedload(BookModel.authors),
-                    joinedload(BookModel.publishers)
+                    joinedload(BookModel.authors)
                 )
                 .filter(BookModel.id == id).first())
 

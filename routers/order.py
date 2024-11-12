@@ -82,3 +82,16 @@ async def delete_order(
         return order_service.delete_order_by_user_id(db, user.id, order_id)
     except Exception as e:
         print(e)
+
+@router.get('/get_order_items_by_order_id')
+async def get_order_items_by_order_id(
+        order_id: int,
+        user=Depends(get_current_user),
+        db=Depends(get_db),
+        order_service=Depends(get_order_service)
+):
+    try:
+        print(user)
+        return order_service.get_order_items_by_order_id(db, order_id)
+    except Exception as e:
+        print(e)

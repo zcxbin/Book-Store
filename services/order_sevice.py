@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Type
 
 from sqlalchemy import and_
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from exceptions import raise_error
 from models.book import Book as BookModel
@@ -87,3 +87,12 @@ class OrderService:
         db.commit()
 
         return db.query(OrderModel).filter(OrderModel.user_id == user_id).all()
+
+    def get_order_items_by_order_id(self, db: Session, order_id: int) -> list[OrderItem]:
+        return (
+            db.query(OrderItem)
+            .options(
+                joinedload(OrderItem.books)
+            )
+            .filter(OrderItem.order_id == order_id)
+            .all())

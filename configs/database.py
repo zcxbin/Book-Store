@@ -13,7 +13,7 @@ host = os.getenv("MYSQL_HOST")
 database = os.getenv("MYSQL_DATABASE")
 port = os.getenv("MYSQL_PORT")
 
-SQLALCHEMY_DATABASE_URL = f'mysql+mysqlconnector://{user}:{password}@{host}:{port}/{database}'
+SQLALCHEMY_DATABASE_URL = f'postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}'
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 sessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
