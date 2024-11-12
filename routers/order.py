@@ -35,8 +35,8 @@ async def get_order_by_user_id(
 ):
     try:
         orders = order_service.get_order_by_user_id(db, user.id)
-        if not orders:
-            return raise_error(501)
+        # if not orders:
+        #     return raise_error(501)
         return orders
     except Exception as e:
         print(e)

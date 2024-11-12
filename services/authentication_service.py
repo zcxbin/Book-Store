@@ -67,7 +67,8 @@ class AuthenticationService:
             "last_name": user.last_name,
             "phone_number": user.phone_number,
             "address": user.address,
-            "role_id": user.role_id
+            "role_id": user.role_id,
+            "role_name": role.role_name
         }
         access_token = create_access_token(data={
             'username': user.username,

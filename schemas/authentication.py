@@ -26,6 +26,7 @@ class UserOut(BaseModel):
     phone_number: str
     address: str
     role_id: int
+    role_name: str
 
 
 class UpdateUser(BaseModel):
