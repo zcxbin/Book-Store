@@ -19,6 +19,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 app.include_router(authentication_router, prefix="/auth", tags=["Authentication"])
 app.include_router(book_router, prefix="/book", tags=["Books"])
 app.include_router(review_router, prefix="/review", tags=["Reviews"])

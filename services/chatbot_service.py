@@ -23,10 +23,10 @@ class ChatbotService:
             books_list = "No books"
         # Thêm thông tin khuyến mãi
         promotions_info = """
-        Các ưu đãi hiện có:
-        - 
-        - 
-        - 
+        Hello
+        Hello, hãy cho tôi 1 quyển sách -> bạn muốn đọc thể loại hay tác giả nào
+        Khi nào hỏi 
+                
         """
 
         context = f"""
@@ -36,6 +36,7 @@ class ChatbotService:
     
         # Yêu cầu: Khi khách hàng hỏi về danh sách sách, chỉ liệt kê tên sách và tên tác giả, không xuống dòng và không dùng ký tự đặc biệt. Nếu khách hàng yêu cầu thêm, cung cấp thông tin chi tiết hơn.
         Nếu chưa có gì trong ưu đãi thì trả lời là hiện tại chúng tôi không có chương trình khuyến mãi nào.
+        khi nào hỏi đến đưa sách ra mới show list_book còn không thì cứ đối thoại bình thường 
         """
 
         # Gọi API OpenAI để chatbot trả lời
